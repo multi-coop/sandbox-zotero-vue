@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper">
+    <ItemsAPI/>
     <h3>SOURCE NUMBER {{id + 1}} : </h3>
     <h1> {{title}}</h1>
 
@@ -18,8 +19,10 @@
 </template>
 
 <script>
+import ItemsAPI from '../utils/ItemsApi.vue'
 export default{
   name : 'apiCardView',
+  components : {ItemsAPI},
   data(){
     return{
       id : parseInt(this.$route.params.id),
@@ -33,16 +36,7 @@ export default{
   },
   async mounted(){
     //GET items' infos : 
-    let items = await fetch('https://api.zotero.org/groups/4571976/items?token=g5mqcdecr82jl2a21t2j4xbo45xt4z7aur9leyoz')
-    items = await items.json()
-    items = items[this.id]
-    console.log(items)
-    this.title = items.data.title
-    this.author = items.meta.createdByUser.username
-    this.url = items.data.url
-    this.date = items.data.dateAdded
-    this.tags = items.data.tags
-    this.abstractNote = items.data.abstractNote
+    ItemsAPI()
   }
 }
 </script>

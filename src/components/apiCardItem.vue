@@ -1,13 +1,16 @@
 <template>
   <div class="container">
+    <!-- <CardAPI/> -->
     <h1> {{title}} </h1>
     <h2>Created by: {{username}} </h2>
   </div>
 </template>
 
 <script>
+import CardAPI from '../utils/CardApi.vue'
 export default {
   name : 'apiCardItem',
+  // components : {CardAPI},
   props : ['keyItem'],
   data(){
     return {
@@ -22,7 +25,8 @@ export default {
     response = await response.json()
     this.title = response.data.title
     this.username = response.meta.createdByUser.username
-    console.log(response)
+    // console.log(response)
+    // CardAPI()
   }
 }
 </script>
