@@ -5,7 +5,7 @@ If you don't have NVM installed yet, check the instructions here : https://githu
 
 ### Project setup
 ```bash
-nvm install v.16.13.0
+nvm install v16.13.0
 nvm use
 npm install
 ```
