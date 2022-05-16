@@ -1,6 +1,8 @@
 <template>
   <div class="wrapper">
-    <h1>Votre bibliographie : </h1>
+    <h1> {{dataName}} </h1>
+    <h2>Membres : {{numberOfMembers}} </h2>
+
     <!-- ONGLETS  -->
     <div class="vues">
       <h2 class="vue liste" 
@@ -12,29 +14,23 @@
         PAR CARTE
       </h2>
     </div>
+
     <!--------------- VUE LISTE -------------->
-    <div v-if="vueListe">
-      <ul v-for="(title, index) in titles" 
+    <div v-show="displayed" 
+         :class="displayed">
+      <ul v-for="(title, index) in dataItems.titles" 
           :key="index">
-        <li> 
-          <router-link 
-            style="text-decoration: none"
-            :to="`/card/${index}`" 
-            class="link">
-            {{ title }}
-          </router-link>
-        </li>
+        <router-link :to="`/apicard/${index}`"> <li> {{title}} </li> </router-link>
       </ul>
     </div>
-
     <!--------------- VUE CARTE -------------->
     <div v-if="vueCarte" 
          class="cards">
-      <ul v-for="(card, index) in titles"
+      <ul v-for="(card, index) in dataItems.titles"
           :key="index">
         <li> 
-          <router-link :to="`/card/${index}`">
-            <Card :infos='allData[index]'/> 
+          <router-link :to="`/apicard/${index}`">
+            <apiCardItem :keyItem="dataItems.keys[index]"/> 
           </router-link>
         </li>
       </ul>
@@ -43,29 +39,50 @@
 </template>
 
 <script>
-import Card from '@/components/Card.vue'
+
+import apiCardItem from '@/components/apiCardItem.vue'
 export default {
-  name: "ZoteroView",
+  name: 'officialApi',
+  components : { apiCardItem },
 
-  components: { Card },
-
-  data() {
+  data(){
     return {
-      allData : [],
-      titles: [],
+      dataItems : {
+        titles : [],
+        keys : [],
+        addedBy : '',
+        dataModified : '',
+        vueListe: true,
+        vueCarte: false,
+        currentIndex : null,
+        displayed : true,
+      },
+
+      numberOfMembers : 0,
+      dataName : '',
       vueListe: true,
       vueCarte: false,
       currentIndex : null
     }
   },
   async mounted() {
-    const response = await fetch("https://api.zotero.org/users/475425/collections/BX9965IJ/items/top?v=3")
-    // const response = await fetch("https://api.zotero.org/groups/4571976?token=g5mqcdecr82jl2a21t2j4xbo45xt4z7aur9leyoz")
-    const data = await response.json()
-    this.titles = data.map(doc => doc.data.title)
-    this.allData = data
-    console.log(this.allData)
+    //Getting general infos (title and number of members): 
+    let response = await fetch('https://api.zotero.org/groups/4571976?token=g5mqcdecr82jl2a21t2j4xbo45xt4z7aur9leyoz')
+    response = await response.json()
+    this.dataName = response.data.name
+    this.numberOfMembers = response.data.members.length
+    //GET items' infos : 
+    let items = await fetch('https://api.zotero.org/groups/4571976/items?token=g5mqcdecr82jl2a21t2j4xbo45xt4z7aur9leyoz')
+    items = await items.json()
+    //GET items keys : 
+    this.dataItems.keys = items.map(item => item.data.key)
+    console.log('items:::',items)
+    //GET items titles : 
+    this.dataItems.titles = items.map(item => item.data.title)
+
+    //Initial style onglets: 
     document.querySelector('.liste').style.backgroundColor = 'cadetblue'
+    document.querySelector('.liste').style.color = 'white'
   },
 
   methods : {
@@ -89,14 +106,16 @@ export default {
       document.querySelector('.carte').style.color = 'black'
     },
   }
+
 }
 </script>
+
 
 <style scoped>
 
   .wrapper{
     border: 1px solid grey;
-    width: 70%;
+    width: 85%;
     margin: 5% auto;
     padding: 1%;
     box-sizing: border-box;
@@ -120,13 +139,13 @@ export default {
   color: black;
 }
 
+ul{
+  list-style-type: none;
+}
+
 .cards{
   display: flex;
   flex-wrap: wrap
-}
-
-ul{
-  list-style-type: none;
 }
 
 .link{
@@ -143,20 +162,5 @@ li{
 
 li a {
   text-decoration: none;
-}
-
-.search{
-  border: 1px solid black;
-  padding: 1%;
-  width: 8rem;
-  border-radius: 5px;
-  margin: auto;
-  margin-top: 5%;
-}
-
-.search:hover{
-  background-color: cadetblue;
-  color: white;
-  font-weight: bold;
 }
 </style>

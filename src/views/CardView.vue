@@ -17,7 +17,7 @@
         <li 
           v-if="typeof tag === 'object'" 
           class="tag"> 
-          {{tag.tag}} 
+          {{ tag.tag }} 
         </li>
       </ul>
     </div>
@@ -68,7 +68,7 @@ export default {
     const response = await fetch('https://api.zotero.org/users/475425/collections/BX9965IJ/items/top?v=3')
     let data = await response.json()
     data = data[this.id]
-    console.log(data)
+    // console.log(data)
     this.cardInfos.title = data.data.title
     this.cardInfos.theme = data.data.conferenceName
     this.cardInfos.tags =  data.data.tags

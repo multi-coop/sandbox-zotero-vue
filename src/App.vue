@@ -2,7 +2,8 @@
   <div id="app">
     <nav>
       <router-link to="/">Home</router-link> |
-      <router-link to="/zotero">Zotero</router-link>
+      <router-link to="/zotero">Zotero</router-link> |
+      <router-link to="/officialapi">Official API</router-link>
     </nav>
     <router-view/>
   </div>
