@@ -15,14 +15,6 @@
       </h2>
     </div>
 
-    <!--------------- VUE LISTE -------------->
-    <div v-show="displayed" 
-         :class="displayed">
-      <ul v-for="(title, index) in dataItems.titles" 
-          :key="index">
-        <router-link :to="`/apicard/${index}`"> <li> {{title}} </li> </router-link>
-      </ul>
-    </div>
     <!--------------- VUE CARTE -------------->
     <div v-if="vueCarte" 
          class="cards">
