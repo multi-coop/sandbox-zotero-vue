@@ -30,7 +30,6 @@ export default {
 <style scoped>
     .container{
         border: 1px solid black;
-        padding: 3%;
         margin: auto;
         width: 30em;
         max-width: 100%;
