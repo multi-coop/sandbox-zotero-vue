@@ -1,7 +1,12 @@
 # zotero-lysiane
 
-## Project setup
-```
+## Install NVM 
+If you don't have NVM installed yet, check the instructions here : https://github.com/nvm-sh/nvm
+
+### Project setup
+```bash
+nvm install v.16.13.0
+nvm use
 npm install
 ```
 
