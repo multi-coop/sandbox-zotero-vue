@@ -14,17 +14,17 @@
         PAR CARTE
       </h2>
     </div>
-
     <!--------------- VUE LISTE -------------->
-    <div v-show="displayed" 
-         :class="displayed">
+    <div v-show="listeDisplayed" 
+         :class="listeDisplayed">
       <ul v-for="(title, index) in dataItems.titles" 
           :key="index">
         <router-link :to="`/apicard/${index}`"> <li> {{title}} </li> </router-link>
       </ul>
     </div>
     <!--------------- VUE CARTE -------------->
-    <div v-if="vueCarte" 
+    <div v-show="carteDisplayed"
+         :class="carteDisplayed" 
          class="cards">
       <ul v-for="(card, index) in dataItems.titles"
           :key="index">
@@ -47,21 +47,19 @@ export default {
 
   data(){
     return {
+      listeDisplayed : true,
+      carteDisplayed : false,
+
       dataItems : {
         titles : [],
         keys : [],
         addedBy : '',
         dataModified : '',
-        vueListe: true,
-        vueCarte: false,
         currentIndex : null,
-        displayed : true,
       },
 
       numberOfMembers : 0,
       dataName : '',
-      vueListe: true,
-      vueCarte: false,
       currentIndex : null
     }
   },
@@ -76,7 +74,7 @@ export default {
     items = await items.json()
     //GET items keys : 
     this.dataItems.keys = items.map(item => item.data.key)
-    console.log('items:::',items)
+    // console.log('items:::',items)
     //GET items titles : 
     this.dataItems.titles = items.map(item => item.data.title)
 
@@ -95,6 +93,8 @@ export default {
       cardOnglet.style.color = 'white'
       document.querySelector('.liste').style.backgroundColor = 'transparent'
       document.querySelector('.liste').style.color = 'black'
+      this.carteDisplayed = true
+      this.listeDisplayed = false
     },
     activateVueListe : function(){
       this.vueListe = true
@@ -104,6 +104,8 @@ export default {
       document.querySelector('.liste').style.color = 'white'
       document.querySelector('.carte').style.backgroundColor = 'transparent'
       document.querySelector('.carte').style.color = 'black'
+      this.listeDisplayed = true
+      this.carteDisplayed = false
     },
   }
 
